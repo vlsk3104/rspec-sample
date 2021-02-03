@@ -1,24 +1,9 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Introduction
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+- システム開発におけるテストの種類
+- なぜ自動テストをするのか
+- Ruby on Railsでよく使われる自動テストフレームワーク RSpec
+- テストコードを書き、実行
+- サンプルプロダクトを開発、作りながら実務で重要なテストコードの学習
