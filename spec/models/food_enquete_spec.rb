@@ -9,14 +9,8 @@ RSpec.describe FoodEnquete, type: :model do
 
         enquete = FactoryBot.build(:food_enquete_tanaka)
         expect(enquete).to be_valid
-
-        # [Point.3-3-3]テストデータを保存します。
         enquete.save
-
-        # [Point.3-3-4][Point.3-3-3]で保存したデータを取得します。
         answered_enquete = FoodEnquete.find(1);
-
-        # [Point.3-3-5][Point.3-3-1]で作成したデータを同一か検証します。
         expect(answered_enquete.name).to eq('田中 太郎')
         expect(answered_enquete.mail).to eq('taro.tanaka@example.com')
         expect(answered_enquete.age).to eq(25)
@@ -30,33 +24,25 @@ RSpec.describe FoodEnquete, type: :model do
   end
 
   describe '入力項目の有無' do
+    let(:new_enquete) { FoodEnquete.new }
     context '必須入力であること' do
-
       it 'お名前が必須であること' do
-        new_enquete = FoodEnquete.new
-
         expect(new_enquete).not_to be_valid
-
         expect(new_enquete.errors[:name]).to include(I18n.t('errors.messages.blank'))
       end
 
       it 'メールアドレスが必須であること' do
-        new_enquete = FoodEnquete.new
-
         expect(new_enquete).not_to be_valid
-
         expect(new_enquete.errors[:name]).to include(I18n.t('errors.messages.blank'))
       end
 
       it '登録できないこと' do
-        new_enquete = FoodEnquete.new
         expect(new_enquete.save).to be_falsey
       end
     end
 
     context '任意入力であること' do
       it 'ご意見・ご要望が任意であること' do
-        new_enquete = FoodEnquete.new
         expect(new_enquete).not_to be_valid
         expect(new_enquete.errors[:request]).not_to include(I18n.t('errors.messages.blank'))
       end
@@ -83,7 +69,6 @@ RSpec.describe FoodEnquete, type: :model do
 
       it '同じメールアドレスで再び回答できないこと' do
         re_enquete_tanaka = FactoryBot.build(:food_enquete_tanaka, food_id: 0, score: 1, present_id: 0, request: "スープがぬるかった")
-  
         expect(re_enquete_tanaka).not_to be_valid
         expect(re_enquete_tanaka.errors[:mail]).to include(I18n.t('errors.messages.taken'))
         expect(re_enquete_tanaka.save).to be_falsey
@@ -92,7 +77,6 @@ RSpec.describe FoodEnquete, type: :model do
 
     it '異なるメールアドレスで回答できること' do
       enquete_yamada = FactoryBot.build(:food_enquete_yamada)
-
       expect(enquete_yamada).to be_valid
       enquete_yamada.save
       expect(FoodEnquete.all.size).to eq 2
@@ -107,7 +91,6 @@ RSpec.describe FoodEnquete, type: :model do
       end
 
       it '成人はビール飲み放題を選択できないこと' do
-
         enquete_sato = FactoryBot.build(:food_enquete_sato, age: 20)
         expect(enquete_sato).to be_valid
       end
@@ -117,14 +100,17 @@ RSpec.describe FoodEnquete, type: :model do
   describe '#adult?' do
     it '20歳未満は成人ではないこと' do
       foodEnquete = FoodEnquete.new
-
       expect(foodEnquete.send(:adult?, 19)).to be_falsey
     end
 
     it '20歳以上は成人であること' do
       foodEnquete = FoodEnquete.new
-
       expect(foodEnquete.send(:adult?, 20)).to be_truthy
     end
+  end
+
+  describe '共通メソッド' do
+    it_behaves_like '価格の表示'
+    it_behaves_like '満足度の表示'
   end
 end
