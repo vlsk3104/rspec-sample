@@ -23,43 +23,6 @@ RSpec.describe FoodEnquete, type: :model do
     end
   end
 
-  describe '入力項目の有無' do
-    let(:new_enquete) { FoodEnquete.new }
-    context '必須入力であること' do
-      it 'お名前が必須であること' do
-        expect(new_enquete).not_to be_valid
-        expect(new_enquete.errors[:name]).to include(I18n.t('errors.messages.blank'))
-      end
-
-      it 'メールアドレスが必須であること' do
-        expect(new_enquete).not_to be_valid
-        expect(new_enquete.errors[:name]).to include(I18n.t('errors.messages.blank'))
-      end
-
-      it '登録できないこと' do
-        expect(new_enquete.save).to be_falsey
-      end
-    end
-
-    context '任意入力であること' do
-      it 'ご意見・ご要望が任意であること' do
-        expect(new_enquete).not_to be_valid
-        expect(new_enquete.errors[:request]).not_to include(I18n.t('errors.messages.blank'))
-      end
-    end
-  end
-
-  describe 'メールアドレスの形式' do
-    context '不正な形式のメールアドレスの場合' do
-      it 'エラーになること' do
-        new_enquete = FoodEnquete.new
-        new_enquete.mail = "taro.tanaka"
-        expect(new_enquete).not_to be_valid
-        expect(new_enquete.errors[:mail]).to include(I18n.t('errors.messages.invalid'))
-      end
-    end
-  end
-
   describe 'アンケート回答時の条件' do
 
     context 'メールアドレスを確認すること' do
@@ -107,6 +70,11 @@ RSpec.describe FoodEnquete, type: :model do
       foodEnquete = FoodEnquete.new
       expect(foodEnquete.send(:adult?, 20)).to be_truthy
     end
+  end
+
+  describe '共通バリデーション' do
+    it_behaves_like '入力項目の有無'
+    it_behaves_like 'メールアドレスの形式'
   end
 
   describe '共通メソッド' do
