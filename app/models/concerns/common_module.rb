@@ -1,7 +1,7 @@
 module CommonModule
   extend ActiveSupport::Concern
 
-  TAX = 1.08
+  TAX = 1.1
   SCORE_BAD = 1
   SCORE_NORMAL = 2
   SCORE_GOOD = 3
